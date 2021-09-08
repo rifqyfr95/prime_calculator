@@ -134,7 +134,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
             Visibility(
                 visible: result.isNotEmpty,
                 child: Text(
-                  "Prime numbers between ${number1controller.text} and ${number2controller.text} are:\n$result",
+                  "Prime numbers between ${number1controller.text} and ${number2controller.text} are:\n${result.join(",")}",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class PrimeCalculation extends ChangeNotifier{
-  var result = "";
+  var result = [];
   void calculatePrime(int number1, int number2) {
     if(result.isNotEmpty){
-      result = "";
+      result.clear();
     }
     int i = 0;
     int num = 0;
@@ -16,12 +16,12 @@ class PrimeCalculation extends ChangeNotifier{
         }
       }
       if (counter == 2){
-        result = result + i.toString() + " ";
+        result.add(i);
       }
     }
     notifyListeners();
   }
-  String get getResult{
+  List get getResult{
     return result;
   }
 }
