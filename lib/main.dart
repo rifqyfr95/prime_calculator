@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:prime_calculator/model/prime_calculation.dart';
 import 'package:prime_calculator/screen/side_menu.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,12 +12,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider.value(value: PrimeCalculation())],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: CalculatorPage(title: 'Prime Calculator'),
       ),
-      home: CalculatorPage(title: 'Prime Calculator'),
     );
   }
 }
@@ -30,35 +35,17 @@ class CalculatorPage extends StatefulWidget {
 }
 
 class _CalculatorPageState extends State<CalculatorPage> {
-  String result = "";
   TextEditingController number1controller = TextEditingController();
   TextEditingController number2controller = TextEditingController();
 
-  void _calculatePrime(int number1, int number2) {
-    if(result.isNotEmpty){
-      result = "";
-    }
-    int i = 0;
-    int num = 0;
-    for(i = number1;i<number2;i++){
-      int counter = 0;
-      for(num = i;num>=1;num--){
-        if(i%num==0){
-          counter = counter + 1;
-        }
-      }
-      if (counter == 2){
-        result = result + i.toString() + " ";
-      }
-    }
-
-    setState(() {
-
-    });
+  void _calculatePrime(BuildContext context, int number1, int number2) {
+    Provider.of<PrimeCalculation>(context, listen: false)
+        .calculatePrime(number1, number2);
   }
 
   @override
   Widget build(BuildContext context) {
+    var result = Provider.of<PrimeCalculation>(context).getResult;
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       drawer: SideMenu(),
@@ -73,7 +60,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              'Please choose between 2 numbers \nto know its list of prime numbers',
+              'Please choose between 2 numbers \nto know its list of prime numbers\nbetween them',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 25.0,
@@ -94,6 +81,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     onEditingComplete: () {
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
+                    cursorColor: Colors.white,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -119,6 +107,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     onEditingComplete: () {
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
+                    cursorColor: Colors.white,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -143,10 +132,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
               height: 20.0,
             ),
             Visibility(
-              visible: result.isNotEmpty,
-                child: Text("Prime numbers between ${number1controller.text} and ${number2controller.text} is:\n$result",
-                  style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center,
-            )),
+                visible: result.isNotEmpty,
+                child: Text(
+                  "Prime numbers between ${number1controller.text} and ${number2controller.text} are:\n$result",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                )),
           ],
         ),
       ),
@@ -155,16 +149,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
           int number1 = int.parse(number1controller.text);
           int number2 = int.parse(number2controller.text);
           if (number1 == 0) {
-            final snackBar = SnackBar(content: Text('First input must be higher then zero'));
+            final snackBar =
+                SnackBar(content: Text('First input must be higher then zero'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }else if (number2 == 0){
-            final snackBar = SnackBar(content: Text('Second input must be higher then zero'));
+          } else if (number2 == 0) {
+            final snackBar = SnackBar(
+                content: Text('Second input must be higher then zero'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }else if(number1 > number2){
-            final snackBar = SnackBar(content: Text('Second number must be higher then first number'));
+          } else if (number1 > number2) {
+            final snackBar = SnackBar(
+                content:
+                    Text('Second number must be higher then first number'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }else{
-            _calculatePrime(number1, number2);
+          } else {
+            _calculatePrime(context, number1, number2);
           }
         },
         padding: EdgeInsets.all(20.0),
