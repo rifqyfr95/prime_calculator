@@ -17,18 +17,18 @@ class SideMenu extends StatelessWidget {
               accountName: Text("Rifqy Fakhrul Rijal"),
               accountEmail: Text("rifqyfakhrul.rfr@gmail.com"),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/pictures/pasfoto.jpg'),
+                backgroundImage: AssetImage('images/pasfoto.jpg'),
               ),
               decoration: BoxDecoration(
                   color: Colors.green,
                   image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage('assets/pictures/background.jpg')))),
+                      image: AssetImage('images/background.jpg')))),
           ListTile(
-            leading: Image.asset(
-              'assets/pictures/linkedin.jpg',
-              width: 15.0,
-              height: 15.0,
+            leading: Image(
+              image: AssetImage('images/linkedin.png'),
+              width: 30.0,
+              height: 30.0,
             ),
             title: Column(
               mainAxisSize: MainAxisSize.min,
@@ -59,9 +59,9 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Image.asset(
-              'assets/pictures/github.jpg',
-              width: 15.0,
-              height: 15.0,
+              'images/github.png',
+              width: 30.0,
+              height: 30.0,
             ),
             title: Column(
               mainAxisSize: MainAxisSize.min,
